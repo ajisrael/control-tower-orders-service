@@ -1,6 +1,6 @@
 package control.tower.order.service.core.data;
 
-import com.appsdeveloperblog.estore.core.model.OrderStatus;
+import control.tower.core.model.OrderStatus;
 import lombok.Data;
 
 import javax.persistence.Column;
@@ -11,20 +11,20 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import java.io.Serializable;
 
-@Entity
-@Table(name = "orders")
 @Data
+@Entity
+@Table(name="orders")
 public class OrderEntity implements Serializable {
 
-    private static final long serialVersionUID = 5313493413859894403L;
+    private static final long serialVersionUID = 789654123987456333L;
 
     @Id
     @Column(unique = true)
-    public String orderId;
-    private String productId;
+    private String orderId;
     private String userId;
-    private int quantity;
+    private String paymentId;
     private String addressId;
+    private String productId;
     @Enumerated(EnumType.STRING)
     private OrderStatus orderStatus;
 }

@@ -1,13 +1,15 @@
-package control.tower.order.service.core.events;
+package control.tower.order.service.command;
 
-import control.tower.core.model.OrderStatus;
 import lombok.Builder;
 import lombok.Getter;
+import org.axonframework.modelling.command.TargetAggregateIdentifier;
+import control.tower.core.model.OrderStatus;
 
 @Getter
 @Builder
-public class OrderCreatedEvent {
+public class CreateOrderCommand {
 
+    @TargetAggregateIdentifier
     private String orderId;
     private String userId;
     private String paymentId;

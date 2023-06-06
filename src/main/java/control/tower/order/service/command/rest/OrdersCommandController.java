@@ -1,13 +1,8 @@
 package control.tower.order.service.command.rest;
 
-import control.tower.order.service.command.commands.CreateOrderCommand;
-import control.tower.order.service.query.FindOrderQuery;
-import com.appsdeveloperblog.estore.core.model.OrderStatus;
-import com.appsdeveloperblog.estore.core.model.OrderSummary;
+import control.tower.core.model.OrderStatus;
+import control.tower.order.service.command.CreateOrderCommand;
 import org.axonframework.commandhandling.gateway.CommandGateway;
-import org.axonframework.messaging.responsetypes.ResponseTypes;
-import org.axonframework.queryhandling.QueryGateway;
-import org.axonframework.queryhandling.SubscriptionQueryResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -21,40 +16,22 @@ import java.util.UUID;
 @RequestMapping("/orders")
 public class OrdersCommandController {
 
-    private final CommandGateway commandGateway;
-    private final QueryGateway queryGateway;
-
     @Autowired
-    public OrdersCommandController(CommandGateway commandGateway, QueryGateway queryGateway) {
-        this.commandGateway = commandGateway;
-        this.queryGateway = queryGateway;
-    }
+    private CommandGateway commandGateway;
 
     @PostMapping
-    public OrderSummary createProduct(@Valid @RequestBody CreateOrderRestModel createOrderRestModel) {
-
-        String userId = "27b95829-4f3f-4ddf-8983-151ba010e35b";
-        String orderId = UUID.randomUUID().toString();
-
+    public String createOrder(@Valid @RequestBody CreateOrderRestModel createOrderRestModel) {
         CreateOrderCommand createOrderCommand = CreateOrderCommand.builder()
-                .orderId(orderId)
-                .userId(userId)
-                .productId(createOrderRestModel.getProductId())
-                .quantity(createOrderRestModel.getQuantity())
+                .orderId(UUID.randomUUID().toString())
+                .userId(createOrderRestModel.getUserId())
+                .paymentId(createOrderRestModel.getPaymentId())
                 .addressId(createOrderRestModel.getAddressId())
+                .productId(createOrderRestModel.getProductId())
                 .orderStatus(OrderStatus.CREATED)
                 .build();
 
-        SubscriptionQueryResult<OrderSummary, OrderSummary> queryResult =
-                queryGateway.subscriptionQuery(new FindOrderQuery(orderId),
-                ResponseTypes.instanceOf(OrderSummary.class),
-                ResponseTypes.instanceOf(OrderSummary.class));
-
-        try {
-            commandGateway.sendAndWait(createOrderCommand);
-            return queryResult.updates().blockFirst();
-        } finally {
-            queryResult.close();
-        }
+        return commandGateway.sendAndWait(createOrderCommand);
     }
 }
+
+

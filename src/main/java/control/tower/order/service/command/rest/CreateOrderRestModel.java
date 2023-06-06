@@ -1,19 +1,22 @@
 package control.tower.order.service.command.rest;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
-import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
+import java.math.BigDecimal;
 
-@Data
+@Getter
+@NoArgsConstructor
 public class CreateOrderRestModel {
 
-    @NotBlank(message = "Product Id is a required field")
-    private String productId;
-    @Min(value = 1, message = "Quantity cannot be lower than 1")
-    @Max(value = 5, message = "Quantity cannot be larger than 5")
-    private int quantity;
-    @NotBlank(message = "Product Id is a required field")
+    @NotBlank(message = "User id is a required field")
+    private String userId;
+    @NotBlank(message = "Payment id is a required field")
+    private String paymentId;
+    @NotBlank(message = "Address id is a required field")
     private String addressId;
+    @NotBlank(message = "Product id is a required field")
+    private String productId;
 }

@@ -1,76 +1,80 @@
 package control.tower.order.service.command;
 
-import control.tower.order.service.command.commands.ApproveOrderCommand;
-import control.tower.order.service.command.commands.CreateOrderCommand;
-import control.tower.order.service.command.commands.RejectOrderCommand;
-import control.tower.order.service.core.events.OrderApprovedEvent;
-import control.tower.order.service.core.events.OrderCreatedEvent;
-import control.tower.order.service.core.events.OrderRejectedEvent;
 import control.tower.core.model.OrderStatus;
+import control.tower.order.service.core.events.OrderCreatedEvent;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.axonframework.commandhandling.CommandHandler;
-import org.axonframework.eventsourcing.EventSourcingHandler;
+import org.axonframework.eventhandling.EventHandler;
 import org.axonframework.modelling.command.AggregateIdentifier;
 import org.axonframework.modelling.command.AggregateLifecycle;
 import org.axonframework.spring.stereotype.Aggregate;
-import org.springframework.beans.BeanUtils;
+
+import static control.tower.order.service.core.utils.Helper.isNullOrBlank;
 
 @Aggregate
 @NoArgsConstructor
+@Getter
 public class OrderAggregate {
 
     @AggregateIdentifier
+
     private String orderId;
-    private String productId;
     private String userId;
-    private int quantity;
+    private String paymentId;
     private String addressId;
+    private String productId;
     private OrderStatus orderStatus;
 
     @CommandHandler
-    public OrderAggregate(CreateOrderCommand createOrderCommand) {
+    public OrderAggregate(CreateOrderCommand command) {
+        validateCreateOrderCommand(command);
 
-        OrderCreatedEvent orderCreatedEvent = new OrderCreatedEvent();
+        OrderCreatedEvent event = OrderCreatedEvent.builder()
+                .orderId(command.getOrderId())
+                .userId(command.getUserId())
+                .paymentId(command.getPaymentId())
+                .addressId(command.getAddressId())
+                .productId(command.getProductId())
+                .orderStatus(command.getOrderStatus())
+                .build();
 
-        BeanUtils.copyProperties(createOrderCommand, orderCreatedEvent);
-
-        AggregateLifecycle.apply(orderCreatedEvent);
+        AggregateLifecycle.apply(event);
     }
 
-    @CommandHandler
-    public void handle(ApproveOrderCommand approveOrderCommand) {
-
-        OrderApprovedEvent orderApprovedEvent = new OrderApprovedEvent(approveOrderCommand.getOrderId());
-
-        AggregateLifecycle.apply(orderApprovedEvent);
+    @EventHandler
+    public void on(OrderCreatedEvent event) {
+        this.orderId = event.getOrderId();
+        this.userId = event.getUserId();
+        this.paymentId = event.getPaymentId();
+        this.addressId = event.getAddressId();
+        this.productId = event.getProductId();
+        this.orderStatus = event.getOrderStatus();
     }
 
-    @CommandHandler
-    public void handle(RejectOrderCommand rejectOrderCommand) {
+    private void validateCreateOrderCommand(CreateOrderCommand command) {
+        if (isNullOrBlank(command.getOrderId())) {
+            throw new IllegalArgumentException("OrderId cannot be empty");
+        }
 
-        OrderRejectedEvent orderRejectedEvent = new OrderRejectedEvent(
-                rejectOrderCommand.getOrderId(), rejectOrderCommand.getReason());
+        if (isNullOrBlank(command.getUserId())) {
+            throw new IllegalArgumentException("UserId cannot be empty");
+        }
 
-        AggregateLifecycle.apply(orderRejectedEvent);
-    }
+        if (isNullOrBlank(command.getPaymentId())) {
+            throw new IllegalArgumentException("PaymentId cannot be empty");
+        }
 
-    @EventSourcingHandler
-    public void on(OrderCreatedEvent orderCreatedEvent) {
-        this.orderId = orderCreatedEvent.getOrderId();
-        this.productId = orderCreatedEvent.getProductId();
-        this.userId = orderCreatedEvent.getUserId();
-        this.quantity = orderCreatedEvent.getQuantity();
-        this.addressId = orderCreatedEvent.getAddressId();
-        this.orderStatus = orderCreatedEvent.getOrderStatus();
-    }
+        if (isNullOrBlank(command.getAddressId())) {
+            throw new IllegalArgumentException("AddressId cannot be empty");
+        }
 
-    @EventSourcingHandler
-    public void on(OrderApprovedEvent orderApprovedEvent) {
-        this.orderStatus = orderApprovedEvent.getOrderStatus();
-    }
+        if (isNullOrBlank(command.getProductId())) {
+            throw new IllegalArgumentException("ProductId cannot be empty");
+        }
 
-    @EventSourcingHandler
-    public void on(OrderRejectedEvent orderRejectedEvent) {
-        this.orderStatus = orderRejectedEvent.getOrderStatus();
+        if (command.getOrderStatus() == null) {
+            throw new IllegalArgumentException("OrderStatus cannot be null");
+        }
     }
 }
