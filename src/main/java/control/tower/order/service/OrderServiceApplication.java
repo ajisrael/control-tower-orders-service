@@ -27,7 +27,7 @@ public class OrderServiceApplication {
 
 	@Autowired
 	public void configure(EventProcessingConfigurer configurer) {
-		configurer.registerListenerInvocationErrorHandler("product-group",
+		configurer.registerListenerInvocationErrorHandler("order-group",
 				configuration -> new OrderServiceEventsErrorHandler());
 	}
 }
