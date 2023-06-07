@@ -1,13 +1,12 @@
 package control.tower.order.service.command;
 
 import control.tower.core.model.OrderStatus;
+import control.tower.order.service.command.commands.CreateOrderCommand;
 import control.tower.order.service.core.events.OrderCreatedEvent;
 import org.axonframework.test.aggregate.AggregateTestFixture;
 import org.axonframework.test.aggregate.FixtureConfiguration;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
-import java.math.BigDecimal;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 

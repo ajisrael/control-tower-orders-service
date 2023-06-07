@@ -1,7 +1,7 @@
 package control.tower.order.service.command.interceptors;
 
 import control.tower.core.model.OrderStatus;
-import control.tower.order.service.command.CreateOrderCommand;
+import control.tower.order.service.command.commands.CreateOrderCommand;
 import control.tower.order.service.core.data.OrderLookupEntity;
 import control.tower.order.service.core.data.OrderLookupRepository;
 import org.axonframework.commandhandling.CommandMessage;

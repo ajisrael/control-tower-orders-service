@@ -1,6 +1,7 @@
 package control.tower.order.service.command;
 
 import control.tower.core.model.OrderStatus;
+import control.tower.order.service.command.commands.CreateOrderCommand;
 import control.tower.order.service.core.events.OrderCreatedEvent;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -9,8 +10,6 @@ import org.axonframework.eventhandling.EventHandler;
 import org.axonframework.modelling.command.AggregateIdentifier;
 import org.axonframework.modelling.command.AggregateLifecycle;
 import org.axonframework.spring.stereotype.Aggregate;
-
-import static control.tower.order.service.core.utils.Helper.isNullOrBlank;
 
 @Aggregate
 @NoArgsConstructor
@@ -28,7 +27,7 @@ public class OrderAggregate {
 
     @CommandHandler
     public OrderAggregate(CreateOrderCommand command) {
-        validateCreateOrderCommand(command);
+        command.validate();
 
         OrderCreatedEvent event = OrderCreatedEvent.builder()
                 .orderId(command.getOrderId())
@@ -50,31 +49,5 @@ public class OrderAggregate {
         this.addressId = event.getAddressId();
         this.productId = event.getProductId();
         this.orderStatus = event.getOrderStatus();
-    }
-
-    private void validateCreateOrderCommand(CreateOrderCommand command) {
-        if (isNullOrBlank(command.getOrderId())) {
-            throw new IllegalArgumentException("OrderId cannot be empty");
-        }
-
-        if (isNullOrBlank(command.getUserId())) {
-            throw new IllegalArgumentException("UserId cannot be empty");
-        }
-
-        if (isNullOrBlank(command.getPaymentId())) {
-            throw new IllegalArgumentException("PaymentId cannot be empty");
-        }
-
-        if (isNullOrBlank(command.getAddressId())) {
-            throw new IllegalArgumentException("AddressId cannot be empty");
-        }
-
-        if (isNullOrBlank(command.getProductId())) {
-            throw new IllegalArgumentException("ProductId cannot be empty");
-        }
-
-        if (command.getOrderStatus() == null) {
-            throw new IllegalArgumentException("OrderStatus cannot be null");
-        }
     }
 }
