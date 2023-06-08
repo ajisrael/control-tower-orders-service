@@ -13,5 +13,4 @@ public class OrderCreatedEvent {
     private String paymentId;
     private String addressId;
     private String productId;
-    private OrderStatus orderStatus;
 }

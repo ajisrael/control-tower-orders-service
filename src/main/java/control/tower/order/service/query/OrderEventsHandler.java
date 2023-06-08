@@ -1,5 +1,6 @@
 package control.tower.order.service.query;
 
+import control.tower.core.model.OrderStatus;
 import control.tower.order.service.core.data.OrderEntity;
 import control.tower.order.service.core.data.OrderRepository;
 import control.tower.order.service.core.events.OrderCreatedEvent;
@@ -37,6 +38,7 @@ public class OrderEventsHandler {
     public void on(OrderCreatedEvent event) {
         OrderEntity orderEntity = new OrderEntity();
         BeanUtils.copyProperties(event, orderEntity);
+        orderEntity.setOrderStatus(OrderStatus.CREATED);
         orderRepository.save(orderEntity);
     }
 }

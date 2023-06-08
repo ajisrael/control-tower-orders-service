@@ -17,7 +17,6 @@ public class CreateOrderCommand {
     private String paymentId;
     private String addressId;
     private String productId;
-    private OrderStatus orderStatus;
 
     public void validate() {
         if (isNullOrBlank(this.getOrderId())) {
@@ -38,10 +37,6 @@ public class CreateOrderCommand {
 
         if (isNullOrBlank(this.getProductId())) {
             throw new IllegalArgumentException("ProductId cannot be empty");
-        }
-
-        if (this.getOrderStatus() == null) {
-            throw new IllegalArgumentException("OrderStatus cannot be null");
         }
     }
 }

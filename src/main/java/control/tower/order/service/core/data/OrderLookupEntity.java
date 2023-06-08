@@ -1,11 +1,14 @@
 package control.tower.order.service.core.data;
 
+import control.tower.core.model.OrderStatus;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import java.io.Serializable;
@@ -22,4 +25,6 @@ public class OrderLookupEntity implements Serializable {
     @Id
     @Column(unique = true)
     private String orderId;
+    @Enumerated(EnumType.STRING)
+    private OrderStatus orderStatus;
 }

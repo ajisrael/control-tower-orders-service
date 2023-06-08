@@ -35,7 +35,6 @@ public class OrderAggregate {
                 .paymentId(command.getPaymentId())
                 .addressId(command.getAddressId())
                 .productId(command.getProductId())
-                .orderStatus(command.getOrderStatus())
                 .build();
 
         AggregateLifecycle.apply(event);
@@ -48,6 +47,6 @@ public class OrderAggregate {
         this.paymentId = event.getPaymentId();
         this.addressId = event.getAddressId();
         this.productId = event.getProductId();
-        this.orderStatus = event.getOrderStatus();
+        this.orderStatus = OrderStatus.CREATED;
     }
 }

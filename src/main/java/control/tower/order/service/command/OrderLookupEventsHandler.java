@@ -1,5 +1,6 @@
 package control.tower.order.service.command;
 
+import control.tower.core.model.OrderStatus;
 import control.tower.order.service.core.events.OrderCreatedEvent;
 import control.tower.order.service.core.data.OrderLookupEntity;
 import control.tower.order.service.core.data.OrderLookupRepository;
@@ -17,6 +18,6 @@ public class OrderLookupEventsHandler {
 
     @EventHandler
     public void on(OrderCreatedEvent event) {
-        orderLookupRepository.save(new OrderLookupEntity(event.getOrderId()));
+        orderLookupRepository.save(new OrderLookupEntity(event.getOrderId(), OrderStatus.CREATED));
     }
 }
