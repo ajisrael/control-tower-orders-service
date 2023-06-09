@@ -1,6 +1,6 @@
 package control.tower.order.service.query.rest;
 
-import control.tower.order.service.query.FindAllOrdersQuery;
+import control.tower.order.service.query.queries.FindAllOrdersQuery;
 import control.tower.order.service.core.data.OrderEntity;
 import org.axonframework.messaging.responsetypes.ResponseTypes;
 import org.axonframework.queryhandling.QueryGateway;
