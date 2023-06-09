@@ -3,6 +3,7 @@ package control.tower.order.service.query;
 import control.tower.core.model.OrderStatus;
 import control.tower.order.service.core.data.OrderEntity;
 import control.tower.order.service.core.data.OrderRepository;
+import control.tower.order.service.core.events.OrderCanceledEvent;
 import control.tower.order.service.core.events.OrderCreatedEvent;
 import org.axonframework.config.ProcessingGroup;
 import org.axonframework.eventhandling.EventHandler;
@@ -11,6 +12,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Component;
+
+import static control.tower.core.utils.Helper.throwErrorIfEntityDoesNotExist;
 
 @Component
 @ProcessingGroup("order-group")
@@ -39,6 +42,17 @@ public class OrderEventsHandler {
         OrderEntity orderEntity = new OrderEntity();
         BeanUtils.copyProperties(event, orderEntity);
         orderEntity.setOrderStatus(OrderStatus.CREATED);
+        orderRepository.save(orderEntity);
+    }
+
+    @EventHandler
+    public void on(OrderCanceledEvent event) {
+        OrderEntity orderEntity = orderRepository.findByOrderId(event.getOrderId());
+
+        throwErrorIfEntityDoesNotExist(orderEntity,
+                String.format("Order %s does not exist", event.getOrderId()));
+
+        orderEntity.setOrderStatus(OrderStatus.CANCELED);
         orderRepository.save(orderEntity);
     }
 }

@@ -37,7 +37,6 @@ class CreateOrderCommandInterceptorTest {
                 .paymentId("paymentId")
                 .addressId("addressId")
                 .productId("productId")
-                .orderStatus(OrderStatus.CREATED)
                 .build();
 
         CommandMessage<CreateOrderCommand> commandMessage = new GenericCommandMessage<>(validCommand);
@@ -58,11 +57,11 @@ class CreateOrderCommandInterceptorTest {
                 .paymentId("paymentId")
                 .addressId("addressId")
                 .productId("productId")
-                .orderStatus(OrderStatus.CREATED)
                 .build();
+
         CommandMessage<CreateOrderCommand> commandMessage = new GenericCommandMessage<>(duplicateCommand);
 
-        OrderLookupEntity existingEntity = new OrderLookupEntity(orderId);
+        OrderLookupEntity existingEntity = new OrderLookupEntity(orderId, OrderStatus.CREATED);
         when(lookupRepository.findByOrderId(orderId)).thenReturn(existingEntity);
 
         BiFunction<Integer, CommandMessage<?>, CommandMessage<?>> result = interceptor.handle(List.of(commandMessage));

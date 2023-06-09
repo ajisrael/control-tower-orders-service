@@ -1,12 +1,14 @@
 package control.tower.order.service.command;
 
 import control.tower.core.model.OrderStatus;
+import control.tower.order.service.command.commands.CancelOrderCommand;
 import control.tower.order.service.command.commands.CreateOrderCommand;
+import control.tower.order.service.core.events.OrderCanceledEvent;
 import control.tower.order.service.core.events.OrderCreatedEvent;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.axonframework.commandhandling.CommandHandler;
-import org.axonframework.eventhandling.EventHandler;
+import org.axonframework.eventsourcing.EventSourcingHandler;
 import org.axonframework.modelling.command.AggregateIdentifier;
 import org.axonframework.modelling.command.AggregateLifecycle;
 import org.axonframework.spring.stereotype.Aggregate;
@@ -40,7 +42,18 @@ public class OrderAggregate {
         AggregateLifecycle.apply(event);
     }
 
-    @EventHandler
+    @CommandHandler
+    public void handle(CancelOrderCommand command) {
+        command.validate();
+
+        OrderCanceledEvent event = OrderCanceledEvent.builder()
+                .orderId(command.getOrderId())
+                .build();
+
+        AggregateLifecycle.apply(event);
+    }
+
+    @EventSourcingHandler
     public void on(OrderCreatedEvent event) {
         this.orderId = event.getOrderId();
         this.userId = event.getUserId();
@@ -48,5 +61,10 @@ public class OrderAggregate {
         this.addressId = event.getAddressId();
         this.productId = event.getProductId();
         this.orderStatus = OrderStatus.CREATED;
+    }
+
+    @EventSourcingHandler
+    public void on(OrderCanceledEvent event) {
+        this.orderStatus = OrderStatus.CANCELED;
     }
 }

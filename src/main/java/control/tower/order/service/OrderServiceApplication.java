@@ -1,5 +1,6 @@
 package control.tower.order.service;
 
+import control.tower.order.service.command.interceptors.CancelOrderCommandInterceptor;
 import control.tower.order.service.command.interceptors.CreateOrderCommandInterceptor;
 import control.tower.order.service.core.errorhandling.OrderServiceEventsErrorHandler;
 import org.axonframework.commandhandling.CommandBus;
@@ -19,9 +20,16 @@ public class OrderServiceApplication {
 	}
 
 	@Autowired
-	public void registerCreateProductCommandInterceptor(ApplicationContext context, CommandBus commandBus) {
+	public void registerCreateOrderCommandInterceptor(ApplicationContext context, CommandBus commandBus) {
 		commandBus.registerDispatchInterceptor(
 				context.getBean(CreateOrderCommandInterceptor.class)
+		);
+	}
+
+	@Autowired
+	public void registerCancelOrderCommandInterceptor(ApplicationContext context, CommandBus commandBus) {
+		commandBus.registerDispatchInterceptor(
+				context.getBean(CancelOrderCommandInterceptor.class)
 		);
 	}
 
