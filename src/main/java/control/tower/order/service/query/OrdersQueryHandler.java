@@ -10,8 +10,6 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 
-import static control.tower.core.utils.Helper.throwErrorIfEntityDoesNotExist;
-
 @Component
 @AllArgsConstructor
 public class OrdersQueryHandler {
@@ -25,8 +23,7 @@ public class OrdersQueryHandler {
 
     @QueryHandler
     public OrderEntity findOrder(FindOrderQuery query) {
-        OrderEntity orderEntity = orderRepository.findByOrderId(query.getOrderId());
-        throwErrorIfEntityDoesNotExist(orderEntity, String.format("Order %s does not exist", query.getOrderId()));
-        return orderEntity;
+        return orderRepository.findById(query.getOrderId()).orElseThrow(
+                () -> new IllegalStateException(String.format("Order %s does not exist", query.getOrderId())));
     }
 }
