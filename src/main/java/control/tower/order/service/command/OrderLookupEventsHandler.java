@@ -10,7 +10,8 @@ import org.axonframework.config.ProcessingGroup;
 import org.axonframework.eventhandling.EventHandler;
 import org.springframework.stereotype.Component;
 
-import static control.tower.core.utils.Helper.throwErrorIfEntityDoesNotExist;
+import static control.tower.core.utils.Helper.throwExceptionIfEntityDoesNotExist;
+import static control.tower.order.service.core.constants.ExceptionMessages.ORDER_WITH_ID_DOES_NOT_EXIST;
 
 @Component
 @AllArgsConstructor
@@ -28,8 +29,8 @@ public class OrderLookupEventsHandler {
     public void on(OrderCanceledEvent event) {
         OrderLookupEntity orderLookupEntity = orderLookupRepository.findByOrderId(event.getOrderId());
 
-        throwErrorIfEntityDoesNotExist(orderLookupEntity,
-                String.format("Order %s does not exist", event.getOrderId()));
+        throwExceptionIfEntityDoesNotExist(orderLookupEntity,
+                String.format(ORDER_WITH_ID_DOES_NOT_EXIST, event.getOrderId()));
 
         orderLookupEntity.setOrderStatus(OrderStatus.CANCELED);
         orderLookupRepository.save(orderLookupEntity);

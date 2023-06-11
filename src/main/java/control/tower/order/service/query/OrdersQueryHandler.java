@@ -10,6 +10,8 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 
+import static control.tower.order.service.core.constants.ExceptionMessages.ORDER_WITH_ID_DOES_NOT_EXIST;
+
 @Component
 @AllArgsConstructor
 public class OrdersQueryHandler {
@@ -24,6 +26,6 @@ public class OrdersQueryHandler {
     @QueryHandler
     public OrderEntity findOrder(FindOrderQuery query) {
         return orderRepository.findById(query.getOrderId()).orElseThrow(
-                () -> new IllegalStateException(String.format("Order %s does not exist", query.getOrderId())));
+                () -> new IllegalStateException(String.format(ORDER_WITH_ID_DOES_NOT_EXIST, query.getOrderId())));
     }
 }

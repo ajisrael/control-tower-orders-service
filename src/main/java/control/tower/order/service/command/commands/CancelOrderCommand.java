@@ -4,7 +4,8 @@ import lombok.Builder;
 import lombok.Getter;
 import org.axonframework.modelling.command.TargetAggregateIdentifier;
 
-import static control.tower.core.utils.Helper.isNullOrBlank;
+import static control.tower.core.utils.Helper.throwExceptionIfParameterIsEmpty;
+import static control.tower.order.service.core.constants.ExceptionMessages.ORDER_ID_CANNOT_BE_EMPTY;
 
 @Getter
 @Builder
@@ -14,8 +15,6 @@ public class CancelOrderCommand {
     private String orderId;
 
     public void validate() {
-        if (isNullOrBlank(this.getOrderId())) {
-            throw new IllegalArgumentException("OrderId cannot be empty");
-        }
+        throwExceptionIfParameterIsEmpty(this.getOrderId(), ORDER_ID_CANNOT_BE_EMPTY);
     }
 }

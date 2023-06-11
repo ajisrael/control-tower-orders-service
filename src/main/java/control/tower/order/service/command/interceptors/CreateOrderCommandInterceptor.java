@@ -12,6 +12,10 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 import java.util.function.BiFunction;
 
+import static control.tower.core.constants.LogMessages.INTERCEPTED_COMMAND;
+import static control.tower.core.utils.Helper.throwExceptionIfEntityDoesExist;
+import static control.tower.order.service.core.constants.ExceptionMessages.ORDER_WITH_ID_ALREADY_EXISTS;
+
 @Component
 public class CreateOrderCommandInterceptor implements MessageDispatchInterceptor<CommandMessage<?>> {
 
@@ -29,19 +33,15 @@ public class CreateOrderCommandInterceptor implements MessageDispatchInterceptor
         return (index, command) -> {
 
             if (CreateOrderCommand.class.equals(command.getPayloadType())) {
-                LOGGER.info("Intercepted command: " + command.getPayloadType());
+                LOGGER.info(String.format(INTERCEPTED_COMMAND, command.getPayloadType()));
 
                 CreateOrderCommand createOrderCommand = (CreateOrderCommand) command.getPayload();
 
                 OrderLookupEntity orderLookupEntity = orderLookupRepository.findByOrderId(
                         createOrderCommand.getOrderId());
 
-                if (orderLookupEntity != null) {
-                    throw new IllegalStateException(
-                            String.format("Order with id %s already exists",
-                                    createOrderCommand.getOrderId())
-                    );
-                }
+                throwExceptionIfEntityDoesExist(orderLookupEntity,
+                        String.format(ORDER_WITH_ID_ALREADY_EXISTS, createOrderCommand.getOrderId()));
             }
 
             return command;

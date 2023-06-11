@@ -13,7 +13,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Component;
 
-import static control.tower.core.utils.Helper.throwErrorIfEntityDoesNotExist;
+import static control.tower.core.utils.Helper.throwExceptionIfEntityDoesNotExist;
+import static control.tower.order.service.core.constants.ExceptionMessages.ORDER_WITH_ID_DOES_NOT_EXIST;
 
 @Component
 @ProcessingGroup("order-group")
@@ -49,8 +50,8 @@ public class OrderEventsHandler {
     public void on(OrderCanceledEvent event) {
         OrderEntity orderEntity = orderRepository.findByOrderId(event.getOrderId());
 
-        throwErrorIfEntityDoesNotExist(orderEntity,
-                String.format("Order %s does not exist", event.getOrderId()));
+        throwExceptionIfEntityDoesNotExist(orderEntity,
+                String.format(ORDER_WITH_ID_DOES_NOT_EXIST, event.getOrderId()));
 
         orderEntity.setOrderStatus(OrderStatus.CANCELED);
         orderRepository.save(orderEntity);

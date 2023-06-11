@@ -22,9 +22,7 @@ public class OrdersQueryController {
 
     @GetMapping
     public List<OrderRestModel> getOrders() {
-        FindAllOrdersQuery findAllOrdersQuery = new FindAllOrdersQuery();
-
-        List<OrderEntity> orderEntities = queryGateway.query(findAllOrdersQuery,
+        List<OrderEntity> orderEntities = queryGateway.query(new FindAllOrdersQuery(),
                 ResponseTypes.multipleInstancesOf(OrderEntity.class)).join();
 
         return convertOrderEntitiesToOrderRestModels(orderEntities);
@@ -32,9 +30,7 @@ public class OrdersQueryController {
 
     @GetMapping(params = "orderId")
     public OrderRestModel getOrder(String orderId) {
-        FindOrderQuery findOrderQuery = new FindOrderQuery(orderId);
-
-        OrderEntity orderEntity = queryGateway.query(findOrderQuery,
+        OrderEntity orderEntity = queryGateway.query(new FindOrderQuery(orderId),
                 ResponseTypes.instanceOf(OrderEntity.class)).join();
 
         return convertOrderEntityToOrderRestModel(orderEntity);
