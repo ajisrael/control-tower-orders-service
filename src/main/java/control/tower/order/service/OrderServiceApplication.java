@@ -20,14 +20,10 @@ public class OrderServiceApplication {
 	}
 
 	@Autowired
-	public void registerCreateOrderCommandInterceptor(ApplicationContext context, CommandBus commandBus) {
+	public void registerOrderCommandInterceptors(ApplicationContext context, CommandBus commandBus) {
 		commandBus.registerDispatchInterceptor(
 				context.getBean(CreateOrderCommandInterceptor.class)
 		);
-	}
-
-	@Autowired
-	public void registerCancelOrderCommandInterceptor(ApplicationContext context, CommandBus commandBus) {
 		commandBus.registerDispatchInterceptor(
 				context.getBean(CancelOrderCommandInterceptor.class)
 		);
