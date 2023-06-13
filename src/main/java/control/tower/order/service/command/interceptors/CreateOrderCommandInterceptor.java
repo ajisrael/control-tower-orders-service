@@ -37,6 +37,8 @@ public class CreateOrderCommandInterceptor implements MessageDispatchInterceptor
 
                 CreateOrderCommand createOrderCommand = (CreateOrderCommand) command.getPayload();
 
+                createOrderCommand.validate();
+
                 OrderLookupEntity orderLookupEntity = orderLookupRepository.findByOrderId(
                         createOrderCommand.getOrderId());
 

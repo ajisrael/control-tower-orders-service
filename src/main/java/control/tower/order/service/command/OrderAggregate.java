@@ -29,8 +29,6 @@ public class OrderAggregate {
 
     @CommandHandler
     public OrderAggregate(CreateOrderCommand command) {
-        command.validate();
-
         OrderCreatedEvent event = OrderCreatedEvent.builder()
                 .orderId(command.getOrderId())
                 .userId(command.getUserId())
@@ -44,8 +42,6 @@ public class OrderAggregate {
 
     @CommandHandler
     public void handle(CancelOrderCommand command) {
-        command.validate();
-
         OrderCanceledEvent event = OrderCanceledEvent.builder()
                 .orderId(command.getOrderId())
                 .build();

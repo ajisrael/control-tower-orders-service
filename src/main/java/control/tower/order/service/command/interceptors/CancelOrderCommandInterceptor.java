@@ -39,6 +39,8 @@ public class CancelOrderCommandInterceptor implements MessageDispatchInterceptor
 
                 CancelOrderCommand cancelOrderCommand = (CancelOrderCommand) command.getPayload();
 
+                cancelOrderCommand.validate();
+
                 OrderLookupEntity orderLookupEntity = orderLookupRepository.findByOrderId(
                         cancelOrderCommand.getOrderId());
 
