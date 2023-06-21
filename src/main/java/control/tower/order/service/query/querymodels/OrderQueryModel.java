@@ -1,11 +1,11 @@
-package control.tower.order.service.query.rest;
+package control.tower.order.service.query.querymodels;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public class OrderRestModel {
+public class OrderQueryModel {
 
     private String orderId;
     private String userId;
