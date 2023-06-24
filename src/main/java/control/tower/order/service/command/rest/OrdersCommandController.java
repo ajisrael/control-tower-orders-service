@@ -1,8 +1,9 @@
 package control.tower.order.service.command.rest;
 
-import control.tower.core.model.OrderStatus;
 import control.tower.order.service.command.commands.CancelOrderCommand;
 import control.tower.order.service.command.commands.CreateOrderCommand;
+import control.tower.order.service.command.rest.models.CancelOrderRestModel;
+import control.tower.order.service.command.rest.models.CreateOrderRestModel;
 import org.axonframework.commandhandling.gateway.CommandGateway;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
