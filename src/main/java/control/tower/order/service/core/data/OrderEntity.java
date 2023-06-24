@@ -3,13 +3,9 @@ package control.tower.order.service.core.data;
 import control.tower.core.model.OrderStatus;
 import lombok.Data;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.io.Serializable;
+import java.util.List;
 
 @Data
 @Entity
@@ -24,7 +20,8 @@ public class OrderEntity implements Serializable {
     private String userId;
     private String paymentId;
     private String addressId;
-    private String productId;
+    @ElementCollection(fetch = FetchType.EAGER)
+    private List<ProductLineItemEntity> productLineItemEntities;
     @Enumerated(EnumType.STRING)
     private OrderStatus orderStatus;
 }

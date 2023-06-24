@@ -27,7 +27,7 @@ public class OrdersCommandController {
                 .userId(createOrderRestModel.getUserId())
                 .paymentId(createOrderRestModel.getPaymentId())
                 .addressId(createOrderRestModel.getAddressId())
-                .productId(createOrderRestModel.getProductId())
+                .productLineItems(createOrderRestModel.getProductLineItems())
                 .build();
 
         return commandGateway.sendAndWait(createOrderCommand);

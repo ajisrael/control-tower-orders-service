@@ -1,8 +1,10 @@
 package control.tower.order.service.core.events;
 
-import control.tower.core.model.OrderStatus;
+import control.tower.order.service.core.valueobjects.ProductLineItem;
 import lombok.Builder;
 import lombok.Getter;
+
+import java.util.List;
 
 @Getter
 @Builder
@@ -12,5 +14,5 @@ public class OrderCreatedEvent {
     private String userId;
     private String paymentId;
     private String addressId;
-    private String productId;
+    private List<ProductLineItem> productLineItems;
 }
