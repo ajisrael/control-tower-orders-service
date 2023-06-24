@@ -29,7 +29,7 @@ public class CreateOrderCommand {
         throwExceptionIfParameterIsEmpty(this.getAddressId(), ADDRESS_ID_CANNOT_BE_EMPTY);
         throwExceptionIfParameterIsNull(this.getProductLineItems(), "Product line items cannot be null");
         for(ProductLineItem productLineItem: this.getProductLineItems()) {
-            throwExceptionIfParameterIsEmpty(productLineItem.getLineItemId(), PRODUCT_ID_CANNOT_BE_EMPTY);
+            throwExceptionIfParameterIsEmpty(productLineItem.getProductId(), PRODUCT_ID_CANNOT_BE_EMPTY);
             throwExceptionIfParameterIsNull(productLineItem.getQuantity(), "Product line item quantity cannot be null");
         }
     }

@@ -1,11 +1,7 @@
 package control.tower.order.service.query;
 
-import control.tower.order.service.core.data.LineItemEntity;
 import control.tower.order.service.core.data.OrderEntity;
 import control.tower.order.service.core.data.OrderRepository;
-import control.tower.order.service.core.data.ProductLineItemEntity;
-import control.tower.order.service.core.valueobjects.LineItem;
-import control.tower.order.service.core.valueobjects.ProductLineItem;
 import control.tower.order.service.query.queries.FindAllOrdersQuery;
 import control.tower.order.service.query.queries.FindOrderQuery;
 import control.tower.order.service.query.querymodels.OrderQueryModel;

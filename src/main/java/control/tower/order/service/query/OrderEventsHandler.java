@@ -1,7 +1,6 @@
 package control.tower.order.service.query;
 
 import control.tower.core.model.OrderStatus;
-import control.tower.order.service.core.data.LineItemEntity;
 import control.tower.order.service.core.data.OrderEntity;
 import control.tower.order.service.core.data.OrderRepository;
 import control.tower.order.service.core.data.ProductLineItemEntity;
@@ -53,7 +52,7 @@ public class OrderEventsHandler {
 
         for (ProductLineItem productLineItem: event.getProductLineItems()) {
             productLineItemEntities.add( new ProductLineItemEntity(
-                    productLineItem.getLineItemId(), productLineItem.getQuantity(), 10.0));
+                    productLineItem.getProductId(), productLineItem.getQuantity(), 10.0));
         }
         orderEntity.setProductLineItemEntities(productLineItemEntities);
 
