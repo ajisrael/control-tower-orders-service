@@ -1,4 +1,4 @@
-package control.tower.order.service.core.data;
+package control.tower.order.service.core.data.entities;
 
 import control.tower.core.model.OrderStatus;
 import lombok.AllArgsConstructor;

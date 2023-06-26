@@ -1,8 +1,8 @@
 package control.tower.order.service.core.data.converters;
 
-import control.tower.order.service.core.data.OrderEntity;
-import control.tower.order.service.core.data.ProductLineItemEntity;
-import control.tower.order.service.core.data.PromotionLineItemEntity;
+import control.tower.order.service.core.data.entities.OrderEntity;
+import control.tower.order.service.core.data.entities.ProductLineItemEntity;
+import control.tower.order.service.core.data.entities.PromotionLineItemEntity;
 import control.tower.order.service.core.data.dtos.OrderDto;
 import control.tower.order.service.core.valueobjects.ProductLineItem;
 import control.tower.order.service.core.valueobjects.PromotionLineItem;

@@ -3,7 +3,7 @@ package control.tower.order.service.command;
 import control.tower.core.model.OrderStatus;
 import control.tower.order.service.core.events.OrderCanceledEvent;
 import control.tower.order.service.core.events.OrderCreatedEvent;
-import control.tower.order.service.core.data.OrderLookupEntity;
+import control.tower.order.service.core.data.entities.OrderLookupEntity;
 import control.tower.order.service.core.data.OrderLookupRepository;
 import lombok.AllArgsConstructor;
 import org.axonframework.config.ProcessingGroup;
