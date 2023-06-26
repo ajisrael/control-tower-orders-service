@@ -3,7 +3,7 @@ package control.tower.order.service.command.interceptors;
 import control.tower.core.model.OrderStatus;
 import control.tower.order.service.command.commands.CancelOrderCommand;
 import control.tower.order.service.core.data.entities.OrderLookupEntity;
-import control.tower.order.service.core.data.OrderLookupRepository;
+import control.tower.order.service.core.data.repositories.OrderLookupRepository;
 import org.axonframework.commandhandling.CommandMessage;
 import org.axonframework.messaging.MessageDispatchInterceptor;
 import org.slf4j.Logger;

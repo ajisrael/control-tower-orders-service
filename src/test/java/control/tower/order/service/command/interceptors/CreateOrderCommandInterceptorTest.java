@@ -3,7 +3,7 @@ package control.tower.order.service.command.interceptors;
 import control.tower.core.model.OrderStatus;
 import control.tower.order.service.command.commands.CreateOrderCommand;
 import control.tower.order.service.core.data.entities.OrderLookupEntity;
-import control.tower.order.service.core.data.OrderLookupRepository;
+import control.tower.order.service.core.data.repositories.OrderLookupRepository;
 import org.axonframework.commandhandling.CommandMessage;
 import org.axonframework.commandhandling.GenericCommandMessage;
 import org.junit.jupiter.api.BeforeEach;

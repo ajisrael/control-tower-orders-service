@@ -3,7 +3,7 @@ package control.tower.order.service.query;
 import control.tower.order.service.core.data.dtos.OrderDto;
 import control.tower.order.service.core.data.entities.OrderEntity;
 import control.tower.order.service.core.data.converters.OrderEntityToOrderDtoConverter;
-import control.tower.order.service.core.data.OrderRepository;
+import control.tower.order.service.core.data.repositories.OrderRepository;
 import control.tower.order.service.query.queries.FindAllOrdersQuery;
 import control.tower.order.service.query.queries.FindOrderQuery;
 import control.tower.order.service.query.querymodels.OrderQueryModel;
