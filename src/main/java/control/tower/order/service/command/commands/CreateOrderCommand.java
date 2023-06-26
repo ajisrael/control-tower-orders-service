@@ -28,16 +28,20 @@ public class CreateOrderCommand {
         throwExceptionIfParameterIsEmpty(this.getUserId(), USER_ID_CANNOT_BE_EMPTY);
         throwExceptionIfParameterIsEmpty(this.getPaymentId(), PAYMENT_ID_CANNOT_BE_EMPTY);
         throwExceptionIfParameterIsEmpty(this.getAddressId(), ADDRESS_ID_CANNOT_BE_EMPTY);
-        throwExceptionIfParameterIsNull(this.getProductLineItems(), "Product line items cannot be null");
-        throwExceptionIfListParameterIsEmpty(this.getProductLineItems(), "Product line items cannot be empty");
+        throwExceptionIfParameterIsNull(this.getProductLineItems(), PRODUCT_LINE_ITEMS_CANNOT_BE_NULL);
+        throwExceptionIfListParameterIsEmpty(this.getProductLineItems(), PRODUCT_LINE_ITEMS_CANNOT_BE_EMPTY);
+
         for(ProductLineItem productLineItem: this.getProductLineItems()) {
-            throwExceptionIfParameterIsEmpty(productLineItem.getProductId(), PRODUCT_ID_CANNOT_BE_EMPTY);
-            throwExceptionIfParameterIsNull(productLineItem.getQuantity(), "Product line item quantity cannot be null");
-            throwExceptionIfParameterIsNull(productLineItem.getUnitPrice(), "Product line item unit price cannot be null");
+            throwExceptionIfParameterIsEmpty(productLineItem.getProductId(), PRODUCT_LINE_ITEM_PRODUCT_ID_CANNOT_BE_EMPTY);
+            throwExceptionIfParameterIsNull(productLineItem.getQuantity(), PRODUCT_LINE_ITEM_QUANTITY_CANNOT_BE_NULL);
+            throwExceptionIfParameterIsNegative(productLineItem.getQuantity(), PRODUCT_LINE_ITEM_QUANTITY_CANNOT_BE_NEGATIVE);
+            throwExceptionIfParameterIsNull(productLineItem.getUnitPrice(), PRODUCT_LINE_ITEM_UNIT_PRICE_CANNOT_BE_NULL);
+            throwExceptionIfParameterIsNegative(productLineItem.getUnitPrice(), PRODUCT_LINE_ITEM_UNIT_PRICE_CANNOT_BE_NEGATIVE);
         }
+
         for(PromotionLineItem promotionLineItem: this.getPromotionLineItems()) {
-            throwExceptionIfParameterIsEmpty(promotionLineItem.getPromotionId(), "Promotion line item cannot be empty");
-            throwExceptionIfParameterIsNull(promotionLineItem.getUnitPrice(), "Promotion line item unit price cannot be null");
+            throwExceptionIfParameterIsEmpty(promotionLineItem.getPromotionId(), PROMOTION_LINE_ITEM_PROMOTION_ID_CANNOT_BE_EMPTY);
+            throwExceptionIfParameterIsNull(promotionLineItem.getUnitPrice(), PROMOTION_LINE_ITEM_UNIT_PRICE_CANNOT_BE_NULL);
         }
     }
 }
