@@ -11,9 +11,7 @@ import control.tower.order.service.core.data.repositories.ServiceLineItemReposit
 import control.tower.order.service.core.events.OrderCanceledEvent;
 import control.tower.order.service.core.events.OrderCreatedEvent;
 import control.tower.order.service.core.events.OrderRemovedEvent;
-import control.tower.order.service.core.valueobjects.ProductLineItem;
-import control.tower.order.service.core.valueobjects.PromotionLineItem;
-import control.tower.order.service.core.valueobjects.ServiceLineItem;
+import control.tower.order.service.core.valueobjects.OrderCalculations;
 import org.axonframework.config.ProcessingGroup;
 import org.axonframework.eventhandling.EventHandler;
 import org.axonframework.messaging.interceptors.ExceptionHandler;
@@ -24,6 +22,7 @@ import org.springframework.stereotype.Component;
 
 import static control.tower.core.utils.Helper.throwExceptionIfEntityDoesNotExist;
 import static control.tower.order.service.core.constants.ExceptionMessages.ORDER_WITH_ID_DOES_NOT_EXIST;
+import static control.tower.order.service.core.utils.OrderCalculationService.calculateOrder;
 
 @Component
 @ProcessingGroup("order-group")
@@ -60,7 +59,9 @@ public class OrderEventsHandler {
         OrderDto orderDto = new OrderDto();
         BeanUtils.copyProperties(event, orderDto);
         orderDto.setOrderStatus(OrderStatus.CREATED);
-        orderDto.setTotalPrice(calculateTotalPrice(orderDto));
+
+        OrderCalculations orderCalculations = calculateOrder(orderDto);
+        BeanUtils.copyProperties(orderCalculations, orderDto);
 
         OrderEntity orderEntity = orderDtoToOrderEntityConverter.convert(orderDto);
 
@@ -91,25 +92,4 @@ public class OrderEventsHandler {
         orderRepository.delete(orderEntity);
     }
 
-    private Double calculateTotalPrice(OrderDto orderDto) {
-        Double totalPrice = 0d;
-
-        for (ProductLineItem productLineItem: orderDto.getProductLineItems()) {
-            totalPrice += productLineItem.getUnitPrice() * productLineItem.getQuantity();
-        }
-
-        for (PromotionLineItem promotionLineItem: orderDto.getPromotionLineItems()) {
-            totalPrice += promotionLineItem.getUnitPrice();
-        }
-
-        for (ServiceLineItem serviceLineItem: orderDto.getServiceLineItems()) {
-            totalPrice += serviceLineItem.getUnitPrice();
-        }
-
-        if (totalPrice < 0d) {
-            totalPrice = 0d;
-        }
-
-        return totalPrice;
-    }
 }

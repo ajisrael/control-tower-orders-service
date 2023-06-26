@@ -19,7 +19,8 @@ public class OrderDto {
     private String paymentId;
     private String addressId;
     private Instant createdAt;
-    private Double totalPrice;
+    private Double orderTotal;
+    private Double salesTax;
     private List<ProductLineItem> productLineItems;
     private List<PromotionLineItem> promotionLineItems;
     private List<ServiceLineItem> serviceLineItems;
