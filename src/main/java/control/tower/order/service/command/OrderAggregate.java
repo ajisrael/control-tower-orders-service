@@ -5,6 +5,8 @@ import control.tower.order.service.command.commands.CancelOrderCommand;
 import control.tower.order.service.command.commands.CreateOrderCommand;
 import control.tower.order.service.core.events.OrderCanceledEvent;
 import control.tower.order.service.core.events.OrderCreatedEvent;
+import control.tower.order.service.core.valueobjects.ProductLineItem;
+import control.tower.order.service.core.valueobjects.PromotionLineItem;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.axonframework.commandhandling.CommandHandler;
@@ -12,6 +14,8 @@ import org.axonframework.eventsourcing.EventSourcingHandler;
 import org.axonframework.modelling.command.AggregateIdentifier;
 import org.axonframework.modelling.command.AggregateLifecycle;
 import org.axonframework.spring.stereotype.Aggregate;
+
+import java.util.List;
 
 @Aggregate
 @NoArgsConstructor
@@ -24,7 +28,8 @@ public class OrderAggregate {
     private String userId;
     private String paymentId;
     private String addressId;
-    private String productId;
+    private List<ProductLineItem> productLineItems;
+    private List<PromotionLineItem> promotionLineItems;
     private OrderStatus orderStatus;
 
     @CommandHandler
@@ -34,7 +39,8 @@ public class OrderAggregate {
                 .userId(command.getUserId())
                 .paymentId(command.getPaymentId())
                 .addressId(command.getAddressId())
-                .productId(command.getProductId())
+                .productLineItems(command.getProductLineItems())
+                .promotionLineItems(command.getPromotionLineItems())
                 .build();
 
         AggregateLifecycle.apply(event);
@@ -55,7 +61,8 @@ public class OrderAggregate {
         this.userId = event.getUserId();
         this.paymentId = event.getPaymentId();
         this.addressId = event.getAddressId();
-        this.productId = event.getProductId();
+        this.productLineItems = event.getProductLineItems();
+        this.promotionLineItems = event.getPromotionLineItems();
         this.orderStatus = OrderStatus.CREATED;
     }
 

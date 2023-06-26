@@ -1,8 +1,12 @@
 package control.tower.order.service.query;
 
 import control.tower.core.model.OrderStatus;
-import control.tower.order.service.core.data.OrderEntity;
-import control.tower.order.service.core.data.OrderRepository;
+import control.tower.order.service.core.data.converters.OrderDtoToOrderEntityConverter;
+import control.tower.order.service.core.data.dtos.OrderDto;
+import control.tower.order.service.core.data.entities.OrderEntity;
+import control.tower.order.service.core.data.repositories.OrderRepository;
+import control.tower.order.service.core.data.repositories.ProductLineItemRepository;
+import control.tower.order.service.core.data.repositories.PromotionLineItemRepository;
 import control.tower.order.service.core.events.OrderCanceledEvent;
 import control.tower.order.service.core.events.OrderCreatedEvent;
 import org.axonframework.config.ProcessingGroup;
@@ -23,9 +27,15 @@ public class OrderEventsHandler {
     private static final Logger LOGGER = LoggerFactory.getLogger(OrderEventsHandler.class);
 
     private final OrderRepository orderRepository;
+    private final ProductLineItemRepository productLineItemRepository;
+    private final PromotionLineItemRepository promotionLineItemRepository;
+    private final OrderDtoToOrderEntityConverter orderDtoToOrderEntityConverter;
 
-    public OrderEventsHandler(OrderRepository orderRepository) {
+    public OrderEventsHandler(OrderRepository orderRepository, ProductLineItemRepository productLineItemRepository, PromotionLineItemRepository promotionLineItemRepository, OrderDtoToOrderEntityConverter orderDtoToOrderEntityConverter) {
         this.orderRepository = orderRepository;
+        this.productLineItemRepository = productLineItemRepository;
+        this.promotionLineItemRepository = promotionLineItemRepository;
+        this.orderDtoToOrderEntityConverter = orderDtoToOrderEntityConverter;
     }
 
     @ExceptionHandler(resultType = Exception.class)
@@ -40,10 +50,16 @@ public class OrderEventsHandler {
 
     @EventHandler
     public void on(OrderCreatedEvent event) {
-        OrderEntity orderEntity = new OrderEntity();
-        BeanUtils.copyProperties(event, orderEntity);
-        orderEntity.setOrderStatus(OrderStatus.CREATED);
+
+        OrderDto orderDto = new OrderDto();
+        BeanUtils.copyProperties(event, orderDto);
+        orderDto.setOrderStatus(OrderStatus.CREATED);
+
+        OrderEntity orderEntity = orderDtoToOrderEntityConverter.convert(orderDto);
+
         orderRepository.save(orderEntity);
+        productLineItemRepository.saveAll(orderEntity.getProductLineItemEntities());
+        promotionLineItemRepository.saveAll(orderEntity.getPromotionLineItemEntities());
     }
 
     @EventHandler

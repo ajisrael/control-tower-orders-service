@@ -1,5 +1,6 @@
 package control.tower.order.service;
 
+import control.tower.core.config.XStreamConfig;
 import control.tower.order.service.command.interceptors.CancelOrderCommandInterceptor;
 import control.tower.order.service.command.interceptors.CreateOrderCommandInterceptor;
 import control.tower.order.service.core.errorhandling.OrderServiceEventsErrorHandler;
@@ -10,9 +11,11 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.Import;
 
 @EnableDiscoveryClient
 @SpringBootApplication
+@Import({ XStreamConfig.class })
 public class OrderServiceApplication {
 
 	public static void main(String[] args) {

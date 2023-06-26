@@ -1,7 +1,10 @@
-package control.tower.order.service.core.data;
+package control.tower.order.service.core.data.entities;
 
 import control.tower.core.model.OrderStatus;
-import lombok.Data;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -11,20 +14,19 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import java.io.Serializable;
 
-@Data
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
-@Table(name="`order`")
-public class OrderEntity implements Serializable {
+@Table(name = "orderlookup")
+public class OrderLookupEntity implements Serializable {
 
-    private static final long serialVersionUID = 789654123987456333L;
+    private static final long serialVersionUID = -4787108556148621716L;
 
     @Id
     @Column(unique = true)
     private String orderId;
-    private String userId;
-    private String paymentId;
-    private String addressId;
-    private String productId;
     @Enumerated(EnumType.STRING)
     private OrderStatus orderStatus;
 }
