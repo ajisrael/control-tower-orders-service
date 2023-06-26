@@ -1,4 +1,4 @@
-package control.tower.order.service.core.data;
+package control.tower.order.service.core.data.dtos;
 
 import control.tower.core.model.OrderStatus;
 import control.tower.order.service.core.valueobjects.ProductLineItem;
