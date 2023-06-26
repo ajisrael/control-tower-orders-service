@@ -2,6 +2,7 @@ package control.tower.order.service.query;
 
 import control.tower.core.model.OrderStatus;
 import control.tower.order.service.core.data.*;
+import control.tower.order.service.core.data.converters.OrderDtoToOrderEntityConverter;
 import control.tower.order.service.core.data.dtos.OrderDto;
 import control.tower.order.service.core.events.OrderCanceledEvent;
 import control.tower.order.service.core.events.OrderCreatedEvent;
