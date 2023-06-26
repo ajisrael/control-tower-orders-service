@@ -19,13 +19,13 @@ public class OrderEntityToOrderDtoConverter {
         OrderDto orderDto = new OrderDto();
         BeanUtils.copyProperties(orderEntity, orderDto);
 
-        List<ProductLineItem> productLineItems = new ArrayList<>();
+        List<ProductLineItem> productLineItems = new ArrayList<>(orderEntity.getProductLineItemEntities().size());
 
         for (ProductLineItemEntity productLineItemEntity: orderEntity.getProductLineItemEntities()) {
             productLineItems.add(new ProductLineItem(productLineItemEntity.getProductId(), productLineItemEntity.getQuantity(), productLineItemEntity.getUnitPrice()));
         }
 
-        List<PromotionLineItem> promotionLineItems = new ArrayList<>();
+        List<PromotionLineItem> promotionLineItems = new ArrayList<>(orderEntity.getPromotionLineItemEntities().size());
 
         for (PromotionLineItemEntity promotionLineItemEntity: orderEntity.getPromotionLineItemEntities()) {
             promotionLineItems.add(new PromotionLineItem(promotionLineItemEntity.getPromotionId(), promotionLineItemEntity.getUnitPrice()));
