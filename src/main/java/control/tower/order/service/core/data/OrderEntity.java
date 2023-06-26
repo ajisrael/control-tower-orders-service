@@ -20,8 +20,10 @@ public class OrderEntity implements Serializable {
     private String userId;
     private String paymentId;
     private String addressId;
-    @ElementCollection(fetch = FetchType.EAGER)
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<ProductLineItemEntity> productLineItemEntities;
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<PromotionLineItemEntity> promotionLineItemEntities;
     @Enumerated(EnumType.STRING)
     private OrderStatus orderStatus;
 }

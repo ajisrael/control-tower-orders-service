@@ -10,27 +10,24 @@ import java.io.Serializable;
 
 @Entity
 @Data
-public class ProductLineItemEntity implements Serializable {
+public class PromotionLineItemEntity implements Serializable {
 
-    private static final long serialVersionUID = 789656123987456333L;
+    private static final long serialVersionUID = 789856123987456333L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String productId;
-    private Integer quantity;
+    private String promotionId;
     private Double unitPrice;
 
-    public ProductLineItemEntity(String productId, Integer quantity, Double unitPrice) {
-        this.productId = productId;
-        this.quantity = quantity;
+    public PromotionLineItemEntity(String promotionId, Double unitPrice) {
+        this.promotionId = promotionId;
         this.unitPrice = unitPrice;
     }
 
-    public ProductLineItemEntity() {
-        this.productId = "productId";
-        this.quantity = 1;
+    public PromotionLineItemEntity() {
+        this.promotionId = "promotionId";
         this.unitPrice = 0.0;
     }
 }

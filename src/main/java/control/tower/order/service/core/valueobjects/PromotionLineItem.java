@@ -2,12 +2,13 @@ package control.tower.order.service.core.valueobjects;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
 @AllArgsConstructor
-public class ProductLineItem {
+@NoArgsConstructor
+public class PromotionLineItem {
 
-    private String productId;
-    private Integer quantity;
+    private String promotionId;
     private Double unitPrice;
 }

@@ -1,12 +1,9 @@
 package control.tower.order.service.query;
 
 import control.tower.core.model.OrderStatus;
-import control.tower.order.service.core.data.OrderEntity;
-import control.tower.order.service.core.data.OrderRepository;
-import control.tower.order.service.core.data.ProductLineItemEntity;
+import control.tower.order.service.core.data.*;
 import control.tower.order.service.core.events.OrderCanceledEvent;
 import control.tower.order.service.core.events.OrderCreatedEvent;
-import control.tower.order.service.core.valueobjects.ProductLineItem;
 import org.axonframework.config.ProcessingGroup;
 import org.axonframework.eventhandling.EventHandler;
 import org.axonframework.messaging.interceptors.ExceptionHandler;
@@ -14,9 +11,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Component;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import static control.tower.core.utils.Helper.throwExceptionIfEntityDoesNotExist;
 import static control.tower.order.service.core.constants.ExceptionMessages.ORDER_WITH_ID_DOES_NOT_EXIST;
@@ -28,9 +22,15 @@ public class OrderEventsHandler {
     private static final Logger LOGGER = LoggerFactory.getLogger(OrderEventsHandler.class);
 
     private final OrderRepository orderRepository;
+    private final ProductLineItemRepository productLineItemRepository;
+    private final PromotionLineItemRepository promotionLineItemRepository;
+    private final OrderDtoToOrderEntityConverter orderDtoToOrderEntityConverter;
 
-    public OrderEventsHandler(OrderRepository orderRepository) {
+    public OrderEventsHandler(OrderRepository orderRepository, ProductLineItemRepository productLineItemRepository, PromotionLineItemRepository promotionLineItemRepository, OrderDtoToOrderEntityConverter orderDtoToOrderEntityConverter) {
         this.orderRepository = orderRepository;
+        this.productLineItemRepository = productLineItemRepository;
+        this.promotionLineItemRepository = promotionLineItemRepository;
+        this.orderDtoToOrderEntityConverter = orderDtoToOrderEntityConverter;
     }
 
     @ExceptionHandler(resultType = Exception.class)
@@ -45,19 +45,16 @@ public class OrderEventsHandler {
 
     @EventHandler
     public void on(OrderCreatedEvent event) {
-        OrderEntity orderEntity = new OrderEntity();
-        BeanUtils.copyProperties(event, orderEntity);
 
-        List<ProductLineItemEntity> productLineItemEntities = new ArrayList<>();
+        OrderDto orderDto = new OrderDto();
+        BeanUtils.copyProperties(event, orderDto);
+        orderDto.setOrderStatus(OrderStatus.CREATED);
 
-        for (ProductLineItem productLineItem: event.getProductLineItems()) {
-            productLineItemEntities.add( new ProductLineItemEntity(
-                    productLineItem.getProductId(), productLineItem.getQuantity(), 10.0));
-        }
-        orderEntity.setProductLineItemEntities(productLineItemEntities);
+        OrderEntity orderEntity = orderDtoToOrderEntityConverter.convert(orderDto);
 
-        orderEntity.setOrderStatus(OrderStatus.CREATED);
         orderRepository.save(orderEntity);
+        productLineItemRepository.saveAll(orderEntity.getProductLineItemEntities());
+        promotionLineItemRepository.saveAll(orderEntity.getPromotionLineItemEntities());
     }
 
     @EventHandler

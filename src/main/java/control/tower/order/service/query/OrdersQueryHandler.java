@@ -1,6 +1,8 @@
 package control.tower.order.service.query;
 
+import control.tower.order.service.core.data.OrderDto;
 import control.tower.order.service.core.data.OrderEntity;
+import control.tower.order.service.core.data.OrderEntityToOrderDtoConverter;
 import control.tower.order.service.core.data.OrderRepository;
 import control.tower.order.service.query.queries.FindAllOrdersQuery;
 import control.tower.order.service.query.queries.FindOrderQuery;
@@ -19,41 +21,49 @@ import static control.tower.order.service.core.constants.ExceptionMessages.ORDER
 public class OrdersQueryHandler {
 
     private final OrderRepository orderRepository;
+    private final OrderEntityToOrderDtoConverter orderEntityToOrderDtoConverter;
 
     @QueryHandler
     public List<OrderQueryModel> findAllOrders(FindAllOrdersQuery query) {
         List<OrderEntity> orderEntities = orderRepository.findAll();
 
-        return convertOrderEntitiesToOrderQueryModels(orderEntities);
+        List<OrderDto> orderDtos = new ArrayList<>();
+
+        for (OrderEntity orderEntity: orderEntities) {
+            orderDtos.add(orderEntityToOrderDtoConverter.convert(orderEntity));
+        }
+
+        return convertOrderDtosToOrderQueryModels(orderDtos);
     }
 
     @QueryHandler
     public OrderQueryModel findOrder(FindOrderQuery query) {
        OrderEntity orderEntity = orderRepository.findById(query.getOrderId()).orElseThrow(
                 () -> new IllegalStateException(String.format(ORDER_WITH_ID_DOES_NOT_EXIST, query.getOrderId())));
-
-       return convertOrderEntityToOrderQueryModel(orderEntity);
+       OrderDto orderDto =  orderEntityToOrderDtoConverter.convert(orderEntity);
+       return convertOrderDtoToOrderQueryModel(orderDto);
     }
 
-    private List<OrderQueryModel> convertOrderEntitiesToOrderQueryModels(
-            List<OrderEntity> orderEntities) {
+    private List<OrderQueryModel> convertOrderDtosToOrderQueryModels(
+            List<OrderDto> orderDtos) {
         List<OrderQueryModel> orderQueryModels = new ArrayList<>();
 
-        for (OrderEntity orderEntity : orderEntities) {
-            orderQueryModels.add(convertOrderEntityToOrderQueryModel(orderEntity));
+        for (OrderDto orderDto: orderDtos) {
+            orderQueryModels.add(convertOrderDtoToOrderQueryModel(orderDto));
         }
 
         return orderQueryModels;
     }
 
-    private OrderQueryModel convertOrderEntityToOrderQueryModel(OrderEntity orderEntity) {
+    private OrderQueryModel convertOrderDtoToOrderQueryModel(OrderDto orderDto) {
         return new OrderQueryModel(
-                orderEntity.getOrderId(),
-                orderEntity.getUserId(),
-                orderEntity.getPaymentId(),
-                orderEntity.getAddressId(),
-                orderEntity.getProductLineItemEntities(),
-                orderEntity.getOrderStatus().toString()
+                orderDto.getOrderId(),
+                orderDto.getUserId(),
+                orderDto.getPaymentId(),
+                orderDto.getAddressId(),
+                orderDto.getProductLineItems(),
+                orderDto.getPromotionLineItems(),
+                orderDto.getOrderStatus().toString()
         );
     }
 }
