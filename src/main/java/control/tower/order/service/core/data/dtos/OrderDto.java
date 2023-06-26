@@ -3,6 +3,7 @@ package control.tower.order.service.core.data.dtos;
 import control.tower.core.model.OrderStatus;
 import control.tower.order.service.core.valueobjects.ProductLineItem;
 import control.tower.order.service.core.valueobjects.PromotionLineItem;
+import control.tower.order.service.core.valueobjects.ServiceLineItem;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -18,5 +19,6 @@ public class OrderDto {
     private String addressId;
     private List<ProductLineItem> productLineItems;
     private List<PromotionLineItem> promotionLineItems;
+    private List<ServiceLineItem> serviceLineItems;
     private OrderStatus orderStatus;
 }

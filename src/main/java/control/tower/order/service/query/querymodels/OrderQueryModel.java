@@ -2,13 +2,14 @@ package control.tower.order.service.query.querymodels;
 
 import control.tower.order.service.core.valueobjects.ProductLineItem;
 import control.tower.order.service.core.valueobjects.PromotionLineItem;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
+import control.tower.order.service.core.valueobjects.ServiceLineItem;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.List;
 
-@Getter
-@AllArgsConstructor
+@Data
+@NoArgsConstructor
 public class OrderQueryModel {
 
     private String orderId;
@@ -17,5 +18,6 @@ public class OrderQueryModel {
     private String addressId;
     private List<ProductLineItem> productLineItems;
     private List<PromotionLineItem> promotionLineItems;
+    private List<ServiceLineItem> serviceLineItems;
     private String orderStatus;
 }

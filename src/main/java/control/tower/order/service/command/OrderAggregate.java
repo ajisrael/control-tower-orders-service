@@ -7,6 +7,7 @@ import control.tower.order.service.core.events.OrderCanceledEvent;
 import control.tower.order.service.core.events.OrderCreatedEvent;
 import control.tower.order.service.core.valueobjects.ProductLineItem;
 import control.tower.order.service.core.valueobjects.PromotionLineItem;
+import control.tower.order.service.core.valueobjects.ServiceLineItem;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.axonframework.commandhandling.CommandHandler;
@@ -30,6 +31,7 @@ public class OrderAggregate {
     private String addressId;
     private List<ProductLineItem> productLineItems;
     private List<PromotionLineItem> promotionLineItems;
+    private List<ServiceLineItem> serviceLineItems;
     private OrderStatus orderStatus;
 
     @CommandHandler
@@ -41,6 +43,7 @@ public class OrderAggregate {
                 .addressId(command.getAddressId())
                 .productLineItems(command.getProductLineItems())
                 .promotionLineItems(command.getPromotionLineItems())
+                .serviceLineItems(command.getServiceLineItems())
                 .build();
 
         AggregateLifecycle.apply(event);
@@ -63,6 +66,7 @@ public class OrderAggregate {
         this.addressId = event.getAddressId();
         this.productLineItems = event.getProductLineItems();
         this.promotionLineItems = event.getPromotionLineItems();
+        this.serviceLineItems = event.getServiceLineItems();
         this.orderStatus = OrderStatus.CREATED;
     }
 

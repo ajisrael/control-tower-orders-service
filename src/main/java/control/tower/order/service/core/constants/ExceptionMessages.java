@@ -22,6 +22,8 @@ public class ExceptionMessages {
     public static final String PRODUCT_LINE_ITEM_UNIT_PRICE_CANNOT_BE_NEGATIVE = String.format(PARAMETER_CANNOT_BE_NEGATIVE, "productLineItemUnitPrice");
     public static final String PROMOTION_LINE_ITEM_PROMOTION_ID_CANNOT_BE_EMPTY = String.format(PARAMETER_CANNOT_BE_EMPTY, "promotionLineItemProductId");
     public static final String PROMOTION_LINE_ITEM_UNIT_PRICE_CANNOT_BE_NULL = String.format(PARAMETER_CANNOT_BE_NULL, "promotionLineItemUnitPrice");
+    public static final String SERVICE_LINE_ITEM_PROMOTION_ID_CANNOT_BE_EMPTY = String.format(PARAMETER_CANNOT_BE_EMPTY, "serviceLineItemProductId");
+    public static final String SERVICE_LINE_ITEM_UNIT_PRICE_CANNOT_BE_NULL = String.format(PARAMETER_CANNOT_BE_NULL, "serviceLineItemUnitPrice");
 
     public static final String ORDER_WITH_ID_DOES_NOT_EXIST = String.format(ENTITY_WITH_ID_DOES_NOT_EXIST, ORDER, "%s");
     public static final String ORDER_WITH_ID_ALREADY_EXISTS = String.format(ENTITY_WITH_ID_ALREADY_EXISTS, ORDER, "%s");

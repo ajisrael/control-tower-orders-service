@@ -1,7 +1,6 @@
 package control.tower.order.service.command.interceptors;
 
 import control.tower.order.service.command.commands.CreateOrderCommand;
-import control.tower.order.service.core.data.entities.OrderLookupEntity;
 import control.tower.order.service.core.data.repositories.OrderLookupRepository;
 import org.axonframework.commandhandling.CommandMessage;
 import org.axonframework.messaging.MessageDispatchInterceptor;
@@ -39,11 +38,11 @@ public class CreateOrderCommandInterceptor implements MessageDispatchInterceptor
 
                 createOrderCommand.validate();
 
-                OrderLookupEntity orderLookupEntity = orderLookupRepository.findByOrderId(
-                        createOrderCommand.getOrderId());
+                String orderId = createOrderCommand.getOrderId();
 
-                throwExceptionIfEntityDoesExist(orderLookupEntity,
-                        String.format(ORDER_WITH_ID_ALREADY_EXISTS, createOrderCommand.getOrderId()));
+                throwExceptionIfEntityDoesExist(
+                        orderLookupRepository.findByOrderId(orderId),
+                        String.format(ORDER_WITH_ID_ALREADY_EXISTS, orderId));
             }
 
             return command;

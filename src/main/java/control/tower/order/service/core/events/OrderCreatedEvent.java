@@ -2,6 +2,7 @@ package control.tower.order.service.core.events;
 
 import control.tower.order.service.core.valueobjects.ProductLineItem;
 import control.tower.order.service.core.valueobjects.PromotionLineItem;
+import control.tower.order.service.core.valueobjects.ServiceLineItem;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -17,4 +18,5 @@ public class OrderCreatedEvent {
     private String addressId;
     private List<ProductLineItem> productLineItems;
     private List<PromotionLineItem> promotionLineItems;
+    private List<ServiceLineItem> serviceLineItems;
 }

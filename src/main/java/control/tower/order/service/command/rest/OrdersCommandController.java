@@ -4,7 +4,6 @@ import control.tower.order.service.command.commands.CancelOrderCommand;
 import control.tower.order.service.command.commands.CreateOrderCommand;
 import control.tower.order.service.command.rest.models.CancelOrderRestModel;
 import control.tower.order.service.command.rest.models.CreateOrderRestModel;
-import control.tower.order.service.core.valueobjects.PromotionLineItem;
 import org.axonframework.commandhandling.gateway.CommandGateway;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -13,8 +12,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -33,6 +30,7 @@ public class OrdersCommandController {
                 .addressId(createOrderRestModel.getAddressId())
                 .productLineItems(createOrderRestModel.getProductLineItems())
                 .promotionLineItems(createOrderRestModel.getPromotionLineItems())
+                .serviceLineItems(createOrderRestModel.getServiceLineItems())
                 .build();
 
         return commandGateway.sendAndWait(createOrderCommand);

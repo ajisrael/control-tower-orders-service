@@ -7,6 +7,7 @@ import control.tower.order.service.core.data.entities.OrderEntity;
 import control.tower.order.service.core.data.repositories.OrderRepository;
 import control.tower.order.service.core.data.repositories.ProductLineItemRepository;
 import control.tower.order.service.core.data.repositories.PromotionLineItemRepository;
+import control.tower.order.service.core.data.repositories.ServiceLineItemRepository;
 import control.tower.order.service.core.events.OrderCanceledEvent;
 import control.tower.order.service.core.events.OrderCreatedEvent;
 import org.axonframework.config.ProcessingGroup;
@@ -29,12 +30,14 @@ public class OrderEventsHandler {
     private final OrderRepository orderRepository;
     private final ProductLineItemRepository productLineItemRepository;
     private final PromotionLineItemRepository promotionLineItemRepository;
+    private final ServiceLineItemRepository serviceLineItemRepository;
     private final OrderDtoToOrderEntityConverter orderDtoToOrderEntityConverter;
 
-    public OrderEventsHandler(OrderRepository orderRepository, ProductLineItemRepository productLineItemRepository, PromotionLineItemRepository promotionLineItemRepository, OrderDtoToOrderEntityConverter orderDtoToOrderEntityConverter) {
+    public OrderEventsHandler(OrderRepository orderRepository, ProductLineItemRepository productLineItemRepository, PromotionLineItemRepository promotionLineItemRepository, ServiceLineItemRepository serviceLineItemRepository, OrderDtoToOrderEntityConverter orderDtoToOrderEntityConverter) {
         this.orderRepository = orderRepository;
         this.productLineItemRepository = productLineItemRepository;
         this.promotionLineItemRepository = promotionLineItemRepository;
+        this.serviceLineItemRepository = serviceLineItemRepository;
         this.orderDtoToOrderEntityConverter = orderDtoToOrderEntityConverter;
     }
 
@@ -60,6 +63,7 @@ public class OrderEventsHandler {
         orderRepository.save(orderEntity);
         productLineItemRepository.saveAll(orderEntity.getProductLineItemEntities());
         promotionLineItemRepository.saveAll(orderEntity.getPromotionLineItemEntities());
+        serviceLineItemRepository.saveAll(orderEntity.getServiceLineItemEntities());
     }
 
     @EventHandler

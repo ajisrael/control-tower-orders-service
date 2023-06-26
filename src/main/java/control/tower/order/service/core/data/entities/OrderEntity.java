@@ -24,6 +24,8 @@ public class OrderEntity implements Serializable {
     private List<ProductLineItemEntity> productLineItemEntities;
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<PromotionLineItemEntity> promotionLineItemEntities;
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<ServiceLineItemEntity> serviceLineItemEntities;
     @Enumerated(EnumType.STRING)
     private OrderStatus orderStatus;
 }
