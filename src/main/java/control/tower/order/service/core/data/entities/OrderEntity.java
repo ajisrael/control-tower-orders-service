@@ -5,6 +5,7 @@ import lombok.Data;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.time.Instant;
 import java.util.List;
 
 @Data
@@ -20,6 +21,7 @@ public class OrderEntity implements Serializable {
     private String userId;
     private String paymentId;
     private String addressId;
+    private Instant createdAt;
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<ProductLineItemEntity> productLineItemEntities;
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)

@@ -16,6 +16,7 @@ import org.axonframework.modelling.command.AggregateIdentifier;
 import org.axonframework.modelling.command.AggregateLifecycle;
 import org.axonframework.spring.stereotype.Aggregate;
 
+import java.time.Instant;
 import java.util.List;
 
 @Aggregate
@@ -32,6 +33,7 @@ public class OrderAggregate {
     private List<ProductLineItem> productLineItems;
     private List<PromotionLineItem> promotionLineItems;
     private List<ServiceLineItem> serviceLineItems;
+    private Instant createdAt;
     private OrderStatus orderStatus;
 
     @CommandHandler
@@ -44,6 +46,7 @@ public class OrderAggregate {
                 .productLineItems(command.getProductLineItems())
                 .promotionLineItems(command.getPromotionLineItems())
                 .serviceLineItems(command.getServiceLineItems())
+                .createdAt(Instant.now())
                 .build();
 
         AggregateLifecycle.apply(event);
@@ -67,6 +70,7 @@ public class OrderAggregate {
         this.productLineItems = event.getProductLineItems();
         this.promotionLineItems = event.getPromotionLineItems();
         this.serviceLineItems = event.getServiceLineItems();
+        this.createdAt = event.getCreatedAt();
         this.orderStatus = OrderStatus.CREATED;
     }
 
