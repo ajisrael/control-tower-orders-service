@@ -3,6 +3,7 @@ package control.tower.order.service;
 import control.tower.core.config.XStreamConfig;
 import control.tower.order.service.command.interceptors.CancelOrderCommandInterceptor;
 import control.tower.order.service.command.interceptors.CreateOrderCommandInterceptor;
+import control.tower.order.service.command.interceptors.RemoveOrderCommandInterceptor;
 import control.tower.order.service.core.errorhandling.OrderServiceEventsErrorHandler;
 import org.axonframework.commandhandling.CommandBus;
 import org.axonframework.config.EventProcessingConfigurer;
@@ -29,6 +30,9 @@ public class OrderServiceApplication {
 		);
 		commandBus.registerDispatchInterceptor(
 				context.getBean(CancelOrderCommandInterceptor.class)
+		);
+		commandBus.registerDispatchInterceptor(
+				context.getBean(RemoveOrderCommandInterceptor.class)
 		);
 	}
 

@@ -5,6 +5,7 @@ import control.tower.order.service.core.events.OrderCanceledEvent;
 import control.tower.order.service.core.events.OrderCreatedEvent;
 import control.tower.order.service.core.data.entities.OrderLookupEntity;
 import control.tower.order.service.core.data.repositories.OrderLookupRepository;
+import control.tower.order.service.core.events.OrderRemovedEvent;
 import lombok.AllArgsConstructor;
 import org.axonframework.config.ProcessingGroup;
 import org.axonframework.eventhandling.EventHandler;
@@ -34,5 +35,10 @@ public class OrderLookupEventsHandler {
 
         orderLookupEntity.setOrderStatus(OrderStatus.CANCELED);
         orderLookupRepository.save(orderLookupEntity);
+    }
+
+    @EventHandler
+    public void on(OrderRemovedEvent event) {
+        orderLookupRepository.deleteById(event.getOrderId());
     }
 }

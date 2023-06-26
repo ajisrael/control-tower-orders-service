@@ -10,6 +10,7 @@ import control.tower.order.service.core.data.repositories.PromotionLineItemRepos
 import control.tower.order.service.core.data.repositories.ServiceLineItemRepository;
 import control.tower.order.service.core.events.OrderCanceledEvent;
 import control.tower.order.service.core.events.OrderCreatedEvent;
+import control.tower.order.service.core.events.OrderRemovedEvent;
 import control.tower.order.service.core.valueobjects.ProductLineItem;
 import control.tower.order.service.core.valueobjects.PromotionLineItem;
 import control.tower.order.service.core.valueobjects.ServiceLineItem;
@@ -78,6 +79,16 @@ public class OrderEventsHandler {
 
         orderEntity.setOrderStatus(OrderStatus.CANCELED);
         orderRepository.save(orderEntity);
+    }
+
+    @EventHandler
+    public void on(OrderRemovedEvent event) {
+        OrderEntity orderEntity = orderRepository.findByOrderId(event.getOrderId());
+
+        throwExceptionIfEntityDoesNotExist(orderEntity,
+                String.format(ORDER_WITH_ID_DOES_NOT_EXIST, event.getOrderId()));
+
+        orderRepository.delete(orderEntity);
     }
 
     private Double calculateTotalPrice(OrderDto orderDto) {

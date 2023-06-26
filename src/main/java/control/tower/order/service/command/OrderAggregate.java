@@ -3,8 +3,10 @@ package control.tower.order.service.command;
 import control.tower.core.model.OrderStatus;
 import control.tower.order.service.command.commands.CancelOrderCommand;
 import control.tower.order.service.command.commands.CreateOrderCommand;
+import control.tower.order.service.command.commands.RemoveOrderCommand;
 import control.tower.order.service.core.events.OrderCanceledEvent;
 import control.tower.order.service.core.events.OrderCreatedEvent;
+import control.tower.order.service.core.events.OrderRemovedEvent;
 import control.tower.order.service.core.valueobjects.ProductLineItem;
 import control.tower.order.service.core.valueobjects.PromotionLineItem;
 import control.tower.order.service.core.valueobjects.ServiceLineItem;
@@ -61,6 +63,15 @@ public class OrderAggregate {
         AggregateLifecycle.apply(event);
     }
 
+    @CommandHandler
+    public void handle(RemoveOrderCommand command) {
+        OrderRemovedEvent event = OrderRemovedEvent.builder()
+                .orderId(command.getOrderId())
+                .build();
+
+        AggregateLifecycle.apply(event);
+    }
+
     @EventSourcingHandler
     public void on(OrderCreatedEvent event) {
         this.orderId = event.getOrderId();
@@ -77,5 +88,10 @@ public class OrderAggregate {
     @EventSourcingHandler
     public void on(OrderCanceledEvent event) {
         this.orderStatus = OrderStatus.CANCELED;
+    }
+
+    @EventSourcingHandler
+    public void on(OrderRemovedEvent event) {
+        AggregateLifecycle.markDeleted();
     }
 }
