@@ -9,6 +9,7 @@ import control.tower.order.service.query.queries.FindOrderQuery;
 import control.tower.order.service.query.querymodels.OrderQueryModel;
 import lombok.AllArgsConstructor;
 import org.axonframework.queryhandling.QueryHandler;
+import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -56,14 +57,11 @@ public class OrdersQueryHandler {
     }
 
     private OrderQueryModel convertOrderDtoToOrderQueryModel(OrderDto orderDto) {
-        return new OrderQueryModel(
-                orderDto.getOrderId(),
-                orderDto.getUserId(),
-                orderDto.getPaymentId(),
-                orderDto.getAddressId(),
-                orderDto.getProductLineItems(),
-                orderDto.getPromotionLineItems(),
-                orderDto.getOrderStatus().toString()
-        );
+        OrderQueryModel orderQueryModel = new OrderQueryModel();
+
+        BeanUtils.copyProperties(orderDto, orderQueryModel);
+        orderQueryModel.setOrderStatus(orderDto.getOrderStatus().toString());
+
+        return orderQueryModel;
     }
 }

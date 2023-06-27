@@ -2,6 +2,7 @@ package control.tower.order.service.command.rest.models;
 
 import control.tower.order.service.core.valueobjects.ProductLineItem;
 import control.tower.order.service.core.valueobjects.PromotionLineItem;
+import control.tower.order.service.core.valueobjects.ServiceLineItem;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -25,11 +26,19 @@ public class CreateOrderRestModel {
     @NotEmpty(message = "Product line items is a required field")
     private List<ProductLineItem> productLineItems;
     private List<PromotionLineItem> promotionLineItems;
+    private List<ServiceLineItem> serviceLineItems;
 
     public List<PromotionLineItem> getPromotionLineItems() {
         if (this.promotionLineItems == null) {
             return new ArrayList<>();
         }
         return this.promotionLineItems;
+    }
+
+    public List<ServiceLineItem> getServiceLineItems() {
+        if (this.serviceLineItems == null) {
+            return new ArrayList<>();
+        }
+        return this.serviceLineItems;
     }
 }

@@ -7,8 +7,11 @@ import control.tower.order.service.core.data.entities.OrderEntity;
 import control.tower.order.service.core.data.repositories.OrderRepository;
 import control.tower.order.service.core.data.repositories.ProductLineItemRepository;
 import control.tower.order.service.core.data.repositories.PromotionLineItemRepository;
+import control.tower.order.service.core.data.repositories.ServiceLineItemRepository;
 import control.tower.order.service.core.events.OrderCanceledEvent;
 import control.tower.order.service.core.events.OrderCreatedEvent;
+import control.tower.order.service.core.events.OrderRemovedEvent;
+import control.tower.order.service.core.valueobjects.OrderCalculations;
 import org.axonframework.config.ProcessingGroup;
 import org.axonframework.eventhandling.EventHandler;
 import org.axonframework.messaging.interceptors.ExceptionHandler;
@@ -19,6 +22,7 @@ import org.springframework.stereotype.Component;
 
 import static control.tower.core.utils.Helper.throwExceptionIfEntityDoesNotExist;
 import static control.tower.order.service.core.constants.ExceptionMessages.ORDER_WITH_ID_DOES_NOT_EXIST;
+import static control.tower.order.service.core.utils.OrderCalculationService.calculateOrder;
 
 @Component
 @ProcessingGroup("order-group")
@@ -29,12 +33,14 @@ public class OrderEventsHandler {
     private final OrderRepository orderRepository;
     private final ProductLineItemRepository productLineItemRepository;
     private final PromotionLineItemRepository promotionLineItemRepository;
+    private final ServiceLineItemRepository serviceLineItemRepository;
     private final OrderDtoToOrderEntityConverter orderDtoToOrderEntityConverter;
 
-    public OrderEventsHandler(OrderRepository orderRepository, ProductLineItemRepository productLineItemRepository, PromotionLineItemRepository promotionLineItemRepository, OrderDtoToOrderEntityConverter orderDtoToOrderEntityConverter) {
+    public OrderEventsHandler(OrderRepository orderRepository, ProductLineItemRepository productLineItemRepository, PromotionLineItemRepository promotionLineItemRepository, ServiceLineItemRepository serviceLineItemRepository, OrderDtoToOrderEntityConverter orderDtoToOrderEntityConverter) {
         this.orderRepository = orderRepository;
         this.productLineItemRepository = productLineItemRepository;
         this.promotionLineItemRepository = promotionLineItemRepository;
+        this.serviceLineItemRepository = serviceLineItemRepository;
         this.orderDtoToOrderEntityConverter = orderDtoToOrderEntityConverter;
     }
 
@@ -50,16 +56,19 @@ public class OrderEventsHandler {
 
     @EventHandler
     public void on(OrderCreatedEvent event) {
-
         OrderDto orderDto = new OrderDto();
         BeanUtils.copyProperties(event, orderDto);
         orderDto.setOrderStatus(OrderStatus.CREATED);
+
+        OrderCalculations orderCalculations = calculateOrder(orderDto);
+        BeanUtils.copyProperties(orderCalculations, orderDto);
 
         OrderEntity orderEntity = orderDtoToOrderEntityConverter.convert(orderDto);
 
         orderRepository.save(orderEntity);
         productLineItemRepository.saveAll(orderEntity.getProductLineItemEntities());
         promotionLineItemRepository.saveAll(orderEntity.getPromotionLineItemEntities());
+        serviceLineItemRepository.saveAll(orderEntity.getServiceLineItemEntities());
     }
 
     @EventHandler
@@ -72,4 +81,15 @@ public class OrderEventsHandler {
         orderEntity.setOrderStatus(OrderStatus.CANCELED);
         orderRepository.save(orderEntity);
     }
+
+    @EventHandler
+    public void on(OrderRemovedEvent event) {
+        OrderEntity orderEntity = orderRepository.findByOrderId(event.getOrderId());
+
+        throwExceptionIfEntityDoesNotExist(orderEntity,
+                String.format(ORDER_WITH_ID_DOES_NOT_EXIST, event.getOrderId()));
+
+        orderRepository.delete(orderEntity);
+    }
+
 }

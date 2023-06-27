@@ -7,4 +7,5 @@ public class DomainConstants {
     }
 
     public static final String ORDER = "Order";
+    public static final Double MI_SALES_TAX_RATE = 0.06;
 }
