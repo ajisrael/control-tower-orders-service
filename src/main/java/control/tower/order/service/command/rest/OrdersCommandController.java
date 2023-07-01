@@ -6,6 +6,7 @@ import control.tower.order.service.command.commands.RemoveOrderCommand;
 import control.tower.order.service.command.rest.requests.CancelOrderRequestModel;
 import control.tower.order.service.command.rest.requests.CreateOrderRequestModel;
 import control.tower.order.service.command.rest.requests.RemoveOrderRequestModel;
+import control.tower.order.service.command.rest.response.OrderCreatedResponseModel;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.axonframework.commandhandling.gateway.CommandGateway;
@@ -24,11 +25,11 @@ public class OrdersCommandController {
     @Autowired
     private CommandGateway commandGateway;
 
-    @PostMapping()
+    @PostMapping
     @ResponseBody
     @ResponseStatus(HttpStatus.CREATED)
     @Operation(summary = "Create order")
-    public String createOrder(@Valid @RequestBody CreateOrderRequestModel createOrderRequestModel) {
+    public OrderCreatedResponseModel createOrder(@Valid @RequestBody CreateOrderRequestModel createOrderRequestModel) {
         CreateOrderCommand createOrderCommand = CreateOrderCommand.builder()
                 .orderId(UUID.randomUUID().toString())
                 .userId(createOrderRequestModel.getUserId())
@@ -39,7 +40,9 @@ public class OrdersCommandController {
                 .serviceLineItems(createOrderRequestModel.getServiceLineItems())
                 .build();
 
-        return commandGateway.sendAndWait(createOrderCommand);
+        String orderId = commandGateway.sendAndWait(createOrderCommand);
+
+        return OrderCreatedResponseModel.builder().orderId(orderId).build();
     }
 
     @PutMapping()
