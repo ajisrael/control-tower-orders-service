@@ -14,7 +14,7 @@ import java.util.List;
 
 @Getter
 @NoArgsConstructor
-public class CreateOrderRestModel {
+public class CreateOrderRequestModel {
 
     @NotBlank(message = "User id is a required field")
     private String userId;

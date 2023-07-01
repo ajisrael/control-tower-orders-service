@@ -3,9 +3,9 @@ package control.tower.order.service.command.rest;
 import control.tower.order.service.command.commands.CancelOrderCommand;
 import control.tower.order.service.command.commands.CreateOrderCommand;
 import control.tower.order.service.command.commands.RemoveOrderCommand;
-import control.tower.order.service.command.rest.requests.CancelOrderRestModel;
-import control.tower.order.service.command.rest.requests.CreateOrderRestModel;
-import control.tower.order.service.command.rest.requests.RemoveOrderRestModel;
+import control.tower.order.service.command.rest.requests.CancelOrderRequestModel;
+import control.tower.order.service.command.rest.requests.CreateOrderRequestModel;
+import control.tower.order.service.command.rest.requests.RemoveOrderRequestModel;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.axonframework.commandhandling.gateway.CommandGateway;
@@ -28,15 +28,15 @@ public class OrdersCommandController {
     @ResponseBody
     @ResponseStatus(HttpStatus.CREATED)
     @Operation(summary = "Create order")
-    public String createOrder(@Valid @RequestBody CreateOrderRestModel createOrderRestModel) {
+    public String createOrder(@Valid @RequestBody CreateOrderRequestModel createOrderRequestModel) {
         CreateOrderCommand createOrderCommand = CreateOrderCommand.builder()
                 .orderId(UUID.randomUUID().toString())
-                .userId(createOrderRestModel.getUserId())
-                .paymentId(createOrderRestModel.getPaymentId())
-                .addressId(createOrderRestModel.getAddressId())
-                .productLineItems(createOrderRestModel.getProductLineItems())
-                .promotionLineItems(createOrderRestModel.getPromotionLineItems())
-                .serviceLineItems(createOrderRestModel.getServiceLineItems())
+                .userId(createOrderRequestModel.getUserId())
+                .paymentId(createOrderRequestModel.getPaymentId())
+                .addressId(createOrderRequestModel.getAddressId())
+                .productLineItems(createOrderRequestModel.getProductLineItems())
+                .promotionLineItems(createOrderRequestModel.getPromotionLineItems())
+                .serviceLineItems(createOrderRequestModel.getServiceLineItems())
                 .build();
 
         return commandGateway.sendAndWait(createOrderCommand);
@@ -46,9 +46,9 @@ public class OrdersCommandController {
     @ResponseBody
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @Operation(summary = "Cancel order")
-    public void cancelOrder(@Valid @RequestBody CancelOrderRestModel cancelOrderRestModel) {
+    public void cancelOrder(@Valid @RequestBody CancelOrderRequestModel cancelOrderRequestModel) {
         CancelOrderCommand cancelOrderCommand = CancelOrderCommand.builder()
-                .orderId(cancelOrderRestModel.getOrderId())
+                .orderId(cancelOrderRequestModel.getOrderId())
                 .build();
 
         commandGateway.sendAndWait(cancelOrderCommand);
@@ -58,9 +58,9 @@ public class OrdersCommandController {
     @ResponseBody
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @Operation(summary = "Remove order")
-    public void removeOrder(@Valid @RequestBody RemoveOrderRestModel removeOrderRestModel) {
+    public void removeOrder(@Valid @RequestBody RemoveOrderRequestModel removeOrderRequestModel) {
         RemoveOrderCommand removeOrderCommand = RemoveOrderCommand.builder()
-                .orderId(removeOrderRestModel.getOrderId())
+                .orderId(removeOrderRequestModel.getOrderId())
                 .build();
 
         commandGateway.sendAndWait(removeOrderCommand);

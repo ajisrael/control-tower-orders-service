@@ -7,7 +7,7 @@ import javax.validation.constraints.NotBlank;
 
 @Getter
 @NoArgsConstructor
-public class RemoveOrderRestModel {
+public class CancelOrderRequestModel {
 
     @NotBlank(message = "Order id is a required field")
     private String orderId;
