@@ -6,7 +6,7 @@ import control.tower.order.service.command.commands.RemoveOrderCommand;
 import control.tower.order.service.command.rest.requests.CancelOrderRequestModel;
 import control.tower.order.service.command.rest.requests.CreateOrderRequestModel;
 import control.tower.order.service.command.rest.requests.RemoveOrderRequestModel;
-import control.tower.order.service.command.rest.response.OrderCreatedResponseModel;
+import control.tower.order.service.command.rest.responses.OrderCreatedResponseModel;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.axonframework.commandhandling.gateway.CommandGateway;

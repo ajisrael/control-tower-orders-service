@@ -1,4 +1,4 @@
-package control.tower.order.service.command.rest.response;
+package control.tower.order.service.command.rest.responses;
 
 import lombok.Builder;
 import lombok.Getter;
