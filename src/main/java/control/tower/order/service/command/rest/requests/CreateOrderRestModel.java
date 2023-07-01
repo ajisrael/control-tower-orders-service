@@ -1,4 +1,4 @@
-package control.tower.order.service.command.rest.models;
+package control.tower.order.service.command.rest.requests;
 
 import control.tower.order.service.core.valueobjects.ProductLineItem;
 import control.tower.order.service.core.valueobjects.PromotionLineItem;
