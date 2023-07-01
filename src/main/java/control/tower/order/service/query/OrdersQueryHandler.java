@@ -10,10 +10,8 @@ import control.tower.order.service.query.querymodels.OrderQueryModel;
 import lombok.AllArgsConstructor;
 import org.axonframework.queryhandling.QueryHandler;
 import org.springframework.beans.BeanUtils;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import static control.tower.order.service.core.constants.ExceptionMessages.ORDER_WITH_ID_DOES_NOT_EXIST;
 
@@ -25,16 +23,10 @@ public class OrdersQueryHandler {
     private final OrderEntityToOrderDtoConverter orderEntityToOrderDtoConverter;
 
     @QueryHandler
-    public List<OrderQueryModel> findAllOrders(FindAllOrdersQuery query) {
-        List<OrderEntity> orderEntities = orderRepository.findAll();
-
-        List<OrderDto> orderDtos = new ArrayList<>();
-
-        for (OrderEntity orderEntity: orderEntities) {
-            orderDtos.add(orderEntityToOrderDtoConverter.convert(orderEntity));
-        }
-
-        return convertOrderDtosToOrderQueryModels(orderDtos);
+    public Page<OrderQueryModel> findAllOrders(FindAllOrdersQuery query) {
+         return orderRepository.findAll(query.getPageable())
+                 .map(orderEntityToOrderDtoConverter::convert)
+                 .map(this::convertOrderDtoToOrderQueryModel);
     }
 
     @QueryHandler
@@ -43,17 +35,6 @@ public class OrdersQueryHandler {
                 () -> new IllegalStateException(String.format(ORDER_WITH_ID_DOES_NOT_EXIST, query.getOrderId())));
        OrderDto orderDto =  orderEntityToOrderDtoConverter.convert(orderEntity);
        return convertOrderDtoToOrderQueryModel(orderDto);
-    }
-
-    private List<OrderQueryModel> convertOrderDtosToOrderQueryModels(
-            List<OrderDto> orderDtos) {
-        List<OrderQueryModel> orderQueryModels = new ArrayList<>();
-
-        for (OrderDto orderDto: orderDtos) {
-            orderQueryModels.add(convertOrderDtoToOrderQueryModel(orderDto));
-        }
-
-        return orderQueryModels;
     }
 
     private OrderQueryModel convertOrderDtoToOrderQueryModel(OrderDto orderDto) {
